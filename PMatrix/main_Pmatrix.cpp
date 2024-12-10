@@ -90,141 +90,81 @@ check_mpi_error(int mpi_result)
     }
 }
 
-int
-main()
-{
-    using namespace apsc::LinearAlgebra;
-    using namespace Eigen;
-    using namespace std;
 
-    using MatrixRow = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
-    using RowMatrix = MatrixRow;
-    using SpVec = Eigen::VectorXd;
-    using ColMatrix = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>;
-
-    MPI_Init(nullptr, nullptr);
+int main(int argc, char** argv) {
+    // Initialize MPI
+    MPI_Init(&argc, &argv);
 
     int mpi_rank, mpi_size;
-    double start_time, end_time, elapsed_time;
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
-    std::vector<double> result;
-    std::size_t userDimensionInput;
+    // Matrix and vector dimensions
+    const int rows = 5;
+    const int cols = 5;
 
-    MPI_Comm mpi_comm = MPI_COMM_WORLD;
-    MPI_Comm_rank(mpi_comm, &mpi_rank);
-    MPI_Comm_size(mpi_comm, &mpi_size);
+    // Matrix and vector storage
+    Eigen::MatrixXd A(rows, cols);
+    Eigen::VectorXd x(cols);
+    Eigen::VectorXd y(rows);
 
-    MatrixRow RowDominantMatrix;
-    ColMatrix ColumnDominantMatrix;
+    // Initialize matrix and vector on root process
+    if (mpi_rank == 0) {
+        // Define matrix
+        A << 1, 2, 3, 4,10,
+             5, 6, 7, 8,20,
+             9, 10, 11, 12,30,
+             13, 14, 15, 16,40,
+              17, 18, 3, 4,50;
 
-    SpVec vec;
 
-    std::size_t nRows = 4; // Changed to an odd number
-    std::size_t nCols = 4;
+        // Define vector (ones)
+        x = Eigen::VectorXd::Ones(cols);
+    }
 
-    // Creating Matrix & Vector
-    RowDominantMatrix = MatrixXd::Random(nRows, nCols);
-    ColumnDominantMatrix = MatrixXd::Random(nRows, nCols);
+    // Broadcast matrix to all processes
+    MPI_Bcast(A.data(), rows * cols, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    
+    // Broadcast vector to all processes
+    MPI_Bcast(x.data(), cols, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-    // Filling Matrix with random values
-    for (int i = 0; i < nRows; i++)
-    {
-        for (int j = 0; j < nCols; j++)
-        {
-            RowDominantMatrix(i, j) = rand() % 10 + 1;
-            ColumnDominantMatrix(i, j) = rand() % 10 + 1;
+    // Distribute work
+    int rows_per_process = rows / mpi_size;
+    int remainder = rows % mpi_size;
+
+    // Calculate local rows and start row for this process
+    int local_rows = rows_per_process + (mpi_rank < remainder ? 1 : 0);
+    int start_row = mpi_rank * rows_per_process + 
+                    (mpi_rank < remainder ? mpi_rank : remainder);
+
+    // Compute local portion of the result
+    Eigen::VectorXd local_result = Eigen::VectorXd::Zero(rows);
+    for (int i = 0; i < local_rows; ++i) {
+        local_result[start_row + i] = A.row(start_row + i).dot(x);
+    }
+
+    // Gather results
+    Eigen::VectorXd global_result(rows);
+    MPI_Reduce(
+        local_result.data(), 
+        global_result.data(), 
+        rows, 
+        MPI_DOUBLE, 
+        MPI_SUM, 
+        0, 
+        MPI_COMM_WORLD
+    );
+
+    // Print results on root process
+    if (mpi_rank == 0) {
+        std::cout << "Final result vector y: [";
+        for (int i = 0; i < rows; ++i) {
+            std::cout << global_result[i] << (i < rows - 1 ? ", " : "");
         }
-    }
-    vec = SpVec::Ones(nRows);
-
-    int rows_per_process = nRows / mpi_size;
-    int remainder_rows = nRows % mpi_size; // Handle the odd number of rows
-    int local_rows = rows_per_process + (mpi_rank < remainder_rows ? 1 : 0);
-
-    Eigen::MatrixXd A;
-    double x[nRows], y[nCols];
-    double local_A[local_rows][nCols];
-    vector<double> local_y(local_rows, 0.0);
-
-
-    MPI_Request request_x, request_A, request_y;
-
-    if (mpi_rank == 0)
-    {
-        cout << "Generated Matrix:" << endl;
-        cout << RowDominantMatrix << endl;
+        std::cout << "]" << std::endl;
     }
 
-    int mpi_result = MPI_Ibcast(vec.data(), nRows, MPI_DOUBLE, 0, MPI_COMM_WORLD, &request_x);
-    check_mpi_error(mpi_result);
-
-    std::vector<int> send_counts(mpi_size);
-    std::vector<int> displacements(mpi_size);
-
-    int offset = 0;
-    for (int i = 0; i < mpi_size; i++)
-    {
-        send_counts[i] = (rows_per_process + (i < remainder_rows ? 1 : 0)) * nCols;
-        displacements[i] = offset;
-        offset += send_counts[i];
-    }
-
-    mpi_result = MPI_Iscatterv(RowDominantMatrix.data(), send_counts.data(), displacements.data(),
-                               MPI_DOUBLE, local_A, local_rows * nCols, MPI_DOUBLE, 0, MPI_COMM_WORLD, &request_A);
-    check_mpi_error(mpi_result);
-
-    mpi_result = MPI_Wait(&request_A, MPI_STATUS_IGNORE);
-    check_mpi_error(mpi_result);
-
-    std::cout << "\nProcessor " << mpi_rank + 1 << " received the following rows: \n";
-
-    for (int i = 0; i < local_rows; i++)
-    {
-        cout << "[";
-        for (int j = 0; j < nCols; j++)
-        {
-            cout << " " << local_A[i][j] << " ";
-        }
-        cout << "]" << endl;
-    }
-
-    mpi_result = MPI_Wait(&request_x, MPI_STATUS_IGNORE);
-    check_mpi_error(mpi_result);
-
-    start_time = MPI_Wtime();
-
-    for (int i = 0; i < local_rows; i++)
-    {
-        local_y[i] = 0.0;
-        for (int j = 0; j < nCols; j++)
-        {
-            local_y[i] += local_A[i][j] * vec[j];
-        }
-        cout << "\nProcessor " << mpi_rank + 1 << " computed row " << i + 1 << " with a local summed value of: " << local_y[i] << std::endl;
-    }
-
-    end_time = MPI_Wtime();
-
-    mpi_result = MPI_Igatherv(local_y.data(), local_rows, MPI_DOUBLE, y, send_counts.data(), displacements.data(), MPI_DOUBLE, 0, MPI_COMM_WORLD, &request_y);
-    check_mpi_error(mpi_result);
-
-    mpi_result = MPI_Wait(&request_y, MPI_STATUS_IGNORE);
-    check_mpi_error(mpi_result);
-
-    if (mpi_rank == 0)
-    {
-        elapsed_time = end_time - start_time;
-        cout << "\nOverall computation time for RowDominant: " << elapsed_time << " seconds" << endl;
-        cout << "Result vector y:" << endl;
-        cout << "[";
-        for (int i = 0; i < nRows; i++)
-        {
-            cout << y[i] << " ";
-        }
-        cout << "]" << endl;
-    }
-
+    // Finalize MPI
     MPI_Finalize();
-
     return 0;
 }
