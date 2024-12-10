@@ -120,6 +120,11 @@ int main(int argc, char** argv) {
 
         // Define vector (ones)
         x = Eigen::VectorXd::Ones(cols);
+
+
+        // Print matrix on root process
+        std::cout << "Generated Matrix:" << std::endl;
+        std::cout << A << std::endl;
     }
 
     // Broadcast matrix to all processes
@@ -137,10 +142,21 @@ int main(int argc, char** argv) {
     int start_row = mpi_rank * rows_per_process + 
                     (mpi_rank < remainder ? mpi_rank : remainder);
 
+    // Start time measurement
+    double start_time = MPI_Wtime();
+ 
     // Compute local portion of the result
     Eigen::VectorXd local_result = Eigen::VectorXd::Zero(rows);
     for (int i = 0; i < local_rows; ++i) {
         local_result[start_row + i] = A.row(start_row + i).dot(x);
+
+          // Print the row each processor is working on
+        std::cout << "\nProcessor " << mpi_rank + 1 << " received following row: \n";
+        std::cout << A.row(start_row + i) << std::endl;
+
+        // Print computation of each row for the processor
+        std::cout << "\nProcessor " << mpi_rank + 1 << " computes Row " << start_row + i + 1
+                  << " with a local summed value of: " << local_result[start_row + i] << std::endl;
     }
 
     // Gather results
@@ -155,6 +171,9 @@ int main(int argc, char** argv) {
         MPI_COMM_WORLD
     );
 
+      // End time measurement
+    double end_time = MPI_Wtime();
+    double elapsed_time = end_time - start_time;
     // Print results on root process
     if (mpi_rank == 0) {
         std::cout << "Final result vector y: [";
@@ -162,6 +181,7 @@ int main(int argc, char** argv) {
             std::cout << global_result[i] << (i < rows - 1 ? ", " : "");
         }
         std::cout << "]" << std::endl;
+         std::cout << "\nOverall computation time for RowDominant: " << elapsed_time << " seconds" << std::endl;
     }
 
     // Finalize MPI
