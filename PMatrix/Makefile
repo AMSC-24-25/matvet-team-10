@@ -1,68 +1,49 @@
-############################################################
-#
-# An example of Makefile for the course on 
-# Advanced Programming for Scientific Computing
-# It should be modified for adapting it to the various examples
-#
-############################################################
-#
-# The environmental variable PACS_ROOT should be set to the
-# root directory where the examples reside. In practice, the directory
-# where this file is found. The resolution of PACS_ROOT is made in the
-# Makefile.h file, where other important variables are also set.
-# The only user defined variable that must be set in this file is
-# the one indicating where Makefile.h resides
+# Compiler and flags
+CXX = mpic++
+STDFLAGS = -std=c++17
+CPPFLAGS = -I.   # Include current directory for headers
 
-MAKEFILEH_DIR=../../../../
-#
-include $(MAKEFILEH_DIR)/Makefile.inc
-#
-# You may have an include file also in the current directory
-#
--include Makefile.inc
+# Sources and objects
+SRCS = $(wildcard *.cpp)
+OBJS = $(SRCS:.cpp=.o)
+HEADERS = $(wildcard *.hpp)
+EXEC = $(basename $(filter main%.cpp, $(SRCS)))
 
-#
-# The general setting is as follows:
-# mains are identified bt main_XX.cpp
-# all other files are XX.cpp
-#
+# Dependencies file
+DEPEND = .depend
 
-# get all files *.cpp
-SRCS=$(wildcard *.cpp)
-# get the corresponding object file
-#OBJS = $(SRCS:.cpp=.o)
-# get all headers in the working directory
-HEADERS=$(wildcard *.hpp)
-#
-exe_sources=$(filter main%.cpp,$(SRCS))
-EXEC=$(exe_sources:.cpp=)
+.PHONY: all clean distclean doc
 
-#========================== ORA LA DEFINIZIONE DEGLI OBIETTIVI
-.phony= all clean distclean doc
-
+# Default target
 .DEFAULT_GOAL = all
 
-all: $(DEPEND) $(EXEC)
+# Build all executables
+all: $(EXEC)
 
+# Rule to build each executable
+$(EXEC): % : %.o $(filter-out $(basename $@).o, $(OBJS))
+	$(CXX) $(STDFLAGS) $(CPPFLAGS) $^ -o $@
+
+# Rule to build object files
+%.o: %.cpp $(HEADERS)
+	$(CXX) $(STDFLAGS) $(CPPFLAGS) -c $< -o $@
+
+# Clean targets
 clean:
-	$(RM) -f $(EXEC) $(OBJS)
+	rm -f $(EXEC) $(OBJS)
 
-distclean:
-	$(MAKE) clean
-	$(RM) -f ./doc $(DEPEND)
-	$(RM) *.out *.bak *~
+distclean: clean
+	rm -f $(DEPEND)
 
+# Documentation target
 doc:
 	doxygen $(DOXYFILE)
 
-$(EXEC): $(OBJS)
-
-$(OBJS): $(SRCS)
-
-$(DEPEND): $(SRCS)
-	$(RM) $(DEPEND)
+# Dependencies generation
+$(DEPEND): $(SRCS) $(HEADERS)
+	rm -f $(DEPEND)
 	for f in $(SRCS); do \
-	$(CXX) $(STDFLAGS) $(CPPFLAGS) -MM $$f >> $(DEPEND); \
+		$(CXX) $(STDFLAGS) $(CPPFLAGS) -MM $$f >> $(DEPEND); \
 	done
 
 -include $(DEPEND)
