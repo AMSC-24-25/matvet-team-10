@@ -1,2 +1,2 @@
-# MatVet-CG-feature-2
-Matrix vector and conjugate gradient
+# MatVet-CG-feature-3
+linear method solution with conjugate gradient to a sparse matrix.
