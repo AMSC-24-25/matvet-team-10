@@ -1,7 +1,7 @@
 #ifndef HH_GC___HH
 #define HH_GC___HH
 
-//*****************************************************************
+//***********************
 // Iterative template routine -- CG
 //
 // CG solves the symmetric positive definite linear
@@ -20,12 +20,13 @@
 //               tolerance was reached
 //      tol  --  the residual after the final iteration
 //
-//*****************************************************************
+//***********************
 
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include <omp.h>
+#include <numeric> // Include this header for std::inner_product
 
 namespace LinearAlgebra {
 
@@ -159,3 +160,5 @@ void testCG() {
 }
 
 } // namespace LinearAlgebra
+
+#endif
