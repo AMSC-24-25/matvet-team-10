@@ -1,5 +1,4 @@
-main_Pmatrix.o: main_Pmatrix.cpp PMatrix.hpp Matrix.hpp mpi_utils.hpp \
- partitioner.hpp chrono.hpp \
+main_Pmatrix.o: main_Pmatrix.cpp MeryPmatrix.hpp \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/Dense \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/Core \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -174,88 +173,4 @@ main_Pmatrix.o: main_Pmatrix.cpp PMatrix.hpp Matrix.hpp mpi_utils.hpp \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/Eigenvalues/./RealQZ.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/Sparse \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/SparseCore \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseUtil.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseMatrixBase.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/../plugins/CommonCwiseUnaryOps.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/../plugins/CommonCwiseBinaryOps.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/../plugins/MatrixCwiseUnaryOps.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/../plugins/MatrixCwiseBinaryOps.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/../plugins/BlockMethods.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseAssign.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/CompressedStorage.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/AmbiVector.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseCompressedBase.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseMatrix.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseMap.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/MappedSparseMatrix.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseVector.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseRef.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseCwiseUnaryOp.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseCwiseBinaryOp.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseTranspose.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseBlock.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseDot.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseRedux.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseView.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseDiagonalProduct.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/ConservativeSparseSparseProduct.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseSparseProductWithPruning.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseProduct.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseDenseProduct.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseSelfAdjointView.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseTriangularView.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/TriangularSolver.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparsePermutation.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseFuzzy.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseSolverBase.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/OrderingMethods \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/OrderingMethods/Amd.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/OrderingMethods/../Core/util/NonMPL2.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/OrderingMethods/Ordering.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/OrderingMethods/Eigen_Colamd.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/SparseCholesky \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCholesky/SimplicialCholesky.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCholesky/SimplicialCholesky_impl.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCholesky/../Core/util/NonMPL2.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/SparseLU \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_gemm_kernel.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_Structs.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_SupernodalMatrix.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLUImpl.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseColEtree.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_Memory.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_heap_relax_snode.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_relax_snode.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_pivotL.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_panel_dfs.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_kernel_bmod.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_panel_bmod.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_column_dfs.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_column_bmod.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_copy_to_ucol.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_pruneL.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU_Utils.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseLU/SparseLU.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/SparseQR \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseQR/SparseQR.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/IterativeLinearSolvers \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/IterativeLinearSolvers/SolveWithGuess.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/IterativeLinearSolvers/IterativeSolverBase.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/IterativeLinearSolvers/BasicPreconditioners.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/IterativeLinearSolvers/ConjugateGradient.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/IterativeLinearSolvers/LeastSquareConjugateGradient.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/IterativeLinearSolvers/BiCGSTAB.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/IterativeLinearSolvers/IncompleteLUT.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/IterativeLinearSolvers/IncompleteCholesky.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/SparseExtra \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/../../Eigen/Sparse \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/../../Eigen/src/Core/util/DisableStupidWarnings.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/src/SparseExtra/DynamicSparseMatrix.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/src/SparseExtra/BlockOfDynamicSparseMatrix.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/src/SparseExtra/RandomSetter.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/src/SparseExtra/MarketIO.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/src/SparseExtra/MatrixMarketIterator.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/../../Eigen/src/Core/util/ReenableStupidWarnings.h
+ /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h
