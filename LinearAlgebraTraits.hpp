@@ -1,7 +1,7 @@
 #ifndef HHH_LinearAlgebraTraits__HH
 #define HHH_LinearAlgebraTraits__HH
-#include <Eigen/SparseCore>
-#include <Eigen/SparseLU>
+#include </u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/SparseCore>
+#include </u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/SparseLU>
 #include <memory>
 /*!
  * Adaptors to interface with Eigen
