@@ -16,7 +16,13 @@
 #include <mpi.h>
 #include <cmath>
 #pragma GCC diagnostic pop
+#define MAX_ROW 5
+#define MAX_COL 5
+#define MIN_GEN_RANGE 1
+#define MAX_GEN_RANGE 5
 
+
+/*
 // Error messages map
 std::map<int, std::string> error_messages = {
     {MPI_SUCCESS, "No error"},
@@ -88,10 +94,15 @@ check_mpi_error(int mpi_result)
     {
         std::cout << "MPI Error: " << error_messages[mpi_result] << std::endl;
     }
-}
+}*/
 
 
 int main(int argc, char** argv) {
+
+    using namespace Eigen;
+    using namespace std;
+
+
     // Initialize MPI
     MPI_Init(&argc, &argv);
 
@@ -100,8 +111,8 @@ int main(int argc, char** argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
     // Matrix and vector dimensions
-    const int rows = 5;
-    const int cols = 5;
+    const int rows = MAX_ROW;
+    const int cols = MAX_COL;
 
     // Matrix and vector storage
     Eigen::MatrixXd A(rows, cols);
@@ -109,22 +120,49 @@ int main(int argc, char** argv) {
     Eigen::VectorXd y(rows);
 
     // Initialize matrix and vector on root process
-    if (mpi_rank == 0) {
-        // Define matrix
-        A << 1, 2, 3, 4,10,
-             5, 6, 7, 8,20,
-             9, 10, 11, 12,30,
-             13, 14, 15, 16,40,
-              17, 18, 3, 4,50;
+     if (mpi_rank == 0) {
+        // Seed random number generator
+        random_device rd;
+        mt19937 gen(rd());
+        uniform_int_distribution<> dist(MIN_GEN_RANGE, MAX_GEN_RANGE); // Random integers between 1 and 10
+
+        // Generate random integer row-major matrix
+        Matrix<int, Dynamic, Dynamic, RowMajor> Arowmajor(rows, cols);
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                Arowmajor(i, j) = dist(gen); // Populate with random integers
+            }
+        }
+
+        cout << "Row-Major Random Matrix Arowmajor:\n" << Arowmajor << "\n\n";
+
+        // Print memory layout for row-major
+        cout << "Memory layout (row-major):\n";
+        cout << "[ ";
+        for (int i = 0; i < Arowmajor.size(); ++i) {
+            cout << *(Arowmajor.data() + i) << "  ";
+        }
+        cout << " ]\n\n";
+
+        // Convert row-major matrix to column-major matrix
+        Matrix<int, Dynamic, Dynamic, ColMajor> Acolmajor = Arowmajor;
+        cout << "Column-Major Matrix Acolmajor:\n" << Acolmajor << "\n\n";
+
+        // Print memory layout for column-major
+        cout << "Memory layout (column-major):\n";
+        cout << "[ ";
+
+        for (int i = 0; i < Acolmajor.size(); ++i) {
+            cout << *(Acolmajor.data() + i) << "  ";
+        }
+        cout << " ]\n\n";
 
 
-        // Define vector (ones)
-        x = Eigen::VectorXd::Ones(cols);
+        // Assign Acolmajor to A as a double matrix for computation
+        A = Acolmajor.cast<double>();
 
-
-        // Print matrix on root process
-        std::cout << "Generated Matrix:" << std::endl;
-        std::cout << A << std::endl;
+        // Initialize vector (ones)
+        x = VectorXd::Ones(cols);
     }
 
     // Broadcast matrix to all processes
@@ -139,8 +177,7 @@ int main(int argc, char** argv) {
 
     // Calculate local rows and start row for this process
     int local_rows = rows_per_process + (mpi_rank < remainder ? 1 : 0);
-    int start_row = mpi_rank * rows_per_process + 
-                    (mpi_rank < remainder ? mpi_rank : remainder);
+    int start_row = mpi_rank * rows_per_process + (mpi_rank < remainder ? mpi_rank : remainder);
 
     // Start time measurement
     double start_time = MPI_Wtime();
@@ -151,11 +188,11 @@ int main(int argc, char** argv) {
         local_result[start_row + i] = A.row(start_row + i).dot(x);
 
           // Print the row each processor is working on
-        std::cout << "\nProcessor " << mpi_rank + 1 << " received following row: \n";
-        std::cout << A.row(start_row + i) << std::endl;
+        cout << "\nProcessor " << mpi_rank + 1 << " received following row: \n";
+        cout <<"[ " << A.row(start_row + i) << " ]"<<std::endl;
 
         // Print computation of each row for the processor
-        std::cout << "\nProcessor " << mpi_rank + 1 << " computes Row " << start_row + i + 1
+        cout << "\nProcessor " << mpi_rank + 1 << " computes Row " << start_row + i + 1
                   << " with a local summed value of: " << local_result[start_row + i] << std::endl;
     }
 
@@ -176,12 +213,12 @@ int main(int argc, char** argv) {
     double elapsed_time = end_time - start_time;
     // Print results on root process
     if (mpi_rank == 0) {
-        std::cout << "Final result vector y: [";
+        cout << "Final result vector y: [";
         for (int i = 0; i < rows; ++i) {
-            std::cout << global_result[i] << (i < rows - 1 ? ", " : "");
+            cout << global_result[i] << (i < rows - 1 ? ", " : "");
         }
-        std::cout << "]" << std::endl;
-         std::cout << "\nOverall computation time for RowDominant: " << elapsed_time << " seconds" << std::endl;
+        cout << "]" << std::endl;
+        cout << "\nOverall computation time for RowDominant: " << elapsed_time << " seconds" << std::endl;
     }
 
     // Finalize MPI
