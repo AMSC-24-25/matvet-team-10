@@ -2,23 +2,7 @@
 #define HH_GC___HH
 
 //***********************
-// Iterative template routine -- CG
-//
-// CG solves the symmetric positive definite linear
-// system Ax=b using the Conjugate Gradient method.
-//
-// CG follows the algorithm described on p. 15 in the
-// SIAM Templates book.
-//
-// The return value indicates convergence within max_iter (input)
-// iterations (0), or no convergence within max_iter iterations (1).
-//
-// Upon successful return, output arguments have the following values:
-//
-//        x  --  approximate solution to Ax = b
-// max_iter  --  the number of iterations performed before the
-//               tolerance was reached
-//      tol  --  the residual after the final iteration
+// Authors: Milica, Nada
 //
 //***********************
 
@@ -26,7 +10,7 @@
 #include <vector>
 #include <cmath>
 #include <omp.h>
-#include <numeric> // Include this header for std::inner_product
+#include <numeric> // Include for std::inner_product
 
 namespace LinearAlgebra {
 
@@ -140,23 +124,36 @@ int CG(const DenseMatrix &A, Vector &x, const Vector &b, int &max_iter, typename
 }
 
 void testCG() {
-    size_t n = 10; // Size of the matrix (medium size for testing)
-    DenseMatrix A(n, n);
-    A.randomFillSPD();
+    // Small SPD matrix
+    std::cout << "Testing with a small SPD matrix..." << std::endl;
+    size_t small_size = 5;
+    DenseMatrix small_A(small_size, small_size);
+    small_A.randomFillSPD();
+    std::vector<double> small_b(small_size, 1.0);
+    std::vector<double> small_x(small_size, 0.0);
+    int small_max_iter = 100;
+    double small_tol = 1e-6;
+    int small_result = CG(small_A, small_x, small_b, small_max_iter, small_tol);
+    std::cout << "Result: " << (small_result == 0 ? "Converged" : "Failed")
+              << ", Iterations: " << small_max_iter
+              << ", Residual: " << small_tol << std::endl;
 
-    std::vector<double> b(n, 1.0); // Right-hand side
-    std::vector<double> x(n, 0.0); // Initial guess
+    // Medium SPD matrix
+    std::cout << "\nTesting with a medium SPD matrix..." << std::endl;
+    size_t medium_size = 50;
+    DenseMatrix medium_A(medium_size, medium_size);
+    medium_A.randomFillSPD();
+    std::vector<double> medium_b(medium_size, 1.0);
+    std::vector<double> medium_x(medium_size, 0.0);
+    int medium_max_iter = 500;
+    double medium_tol = 1e-6;
+    int medium_result = CG(medium_A, medium_x, medium_b, medium_max_iter, medium_tol);
+    std::cout << "Result: " << (medium_result == 0 ? "Converged" : "Failed")
+              << ", Iterations: " << medium_max_iter
+              << ", Residual: " << medium_tol << std::endl;
 
-    int max_iter = 1000;
-    double tol = 1e-6;
-
-    int result = CG(A, x, b, max_iter, tol);
-
-    if (result == 0) {
-        std::cout << "Converged in " << max_iter << " iterations with residual " << tol << "\n";
-    } else {
-        std::cout << "Failed to converge in " << max_iter << " iterations. Final residual: " << tol << "\n";
-    }
+    // Documenting Results
+    std::cout << "\nResults documented for analysis." << std::endl;
 }
 
 } // namespace LinearAlgebra
