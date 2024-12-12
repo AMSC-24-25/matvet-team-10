@@ -54,7 +54,7 @@ public:
             // Acol = Arow;
 
             //load the matrix file that will be downloaded from matrix market
-            Eigen::loadMarket(A, "spd_matrix.mtx");
+            Eigen::loadMarket(A, "spd_test.mtx");
 
             // Initialize vector
             x = SpVec::Ones(cols);
