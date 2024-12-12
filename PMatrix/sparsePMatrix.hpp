@@ -24,7 +24,7 @@ using SpVec=Eigen::VectorXd;
 class SPMatrixTest {
 private:
     int rows, cols;
-    SpMat A, Arow, Acol;
+    SpMat A1, Arow, Acol;
     SpVec x;
 
 public:
@@ -54,7 +54,7 @@ public:
             // Acol = Arow;
 
             //load the matrix file that will be downloaded from matrix market
-            Eigen::loadMarket(A, "spd_matrix.mtx");
+            Eigen::loadMarket(A1, "spd_matrix.mtx");
 
             // Initialize vector
             x = SpVec::Ones(cols);
