@@ -1,7 +1,7 @@
 # Compiler and flags
 CXX = mpic++
 STDFLAGS = -std=c++17
-CPPFLAGS = -I.   # Include current directory for headers
+CPPFLAGS = -I.  -I ${mkEigenInc} # Include current directory for headers
 
 # Sources and objects
 SRCS = $(wildcard *.cpp)

@@ -1,4 +1,5 @@
 #include "MeryPmatrix.hpp"
+#include "sparsePMatrix.hpp"
 #include <mpi.h>
 
 int main(int argc, char** argv) {
@@ -10,7 +11,8 @@ int main(int argc, char** argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
     // Create MatrixTest instance
-    MatrixTest matrix_test;
+    //MatrixTest matrix_test;
+    SPMatrixTest matrix_test;
 
     // Initialize matrices and vectors
     matrix_test.initialize(mpi_rank);
