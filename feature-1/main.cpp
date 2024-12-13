@@ -1,7 +1,11 @@
+#include <iostream>
+#include <string>
 #include "cgg.hpp"
 
+using namespace std;
+
 int main() {
-    // Call the testCG function from the LinearAlgebra namespace
+    cout << "Testing Conjugate Gradient algorithm with Dense matrix\n";
     LinearAlgebra::testCG();
 
     return 0;

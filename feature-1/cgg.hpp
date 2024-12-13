@@ -1,90 +1,25 @@
-#ifndef HH_GC___HH
-#define HH_GC___HH
-
-//*****************************************************************
-// Iterative template routine -- CG
-//
-// CG solves the symmetric positive definite linear
-// system Ax=b using the Conjugate Gradient method.
-//
-// CG follows the algorithm described on p. 15 in the
-// SIAM Templates book.
-//
-// The return value indicates convergence within max_iter (input)
-// iterations (0), or no convergence within max_iter iterations (1).
-//
-// Upon successful return, output arguments have the following values:
-//
-//        x  --  approximate solution to Ax = b
-// max_iter  --  the number of iterations performed before the
-//               tolerance was reached
-//      tol  --  the residual after the final iteration
-//
-//*****************************************************************
+#ifndef CG_HPP
+#define CG_HPP
 
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include <omp.h>
-#include <numeric> // Include for std::inner_product
+#include <numeric>
+#include "denseMatrix.hpp"
 
 namespace LinearAlgebra {
 
-class DenseMatrix {
-private:
-    std::vector<std::vector<double>> data;
-    size_t rows_, cols_;
-
-public:
-    DenseMatrix(size_t rows, size_t cols) : rows_(rows), cols_(cols) {
-        data.resize(rows, std::vector<double>(cols, 0.0));
-    }
-
-    double& operator()(size_t i, size_t j) {
-        return data[i][j];
-    }
-
-    const double& operator()(size_t i, size_t j) const {
-        return data[i][j];
-    }
-
-    size_t rows() const { return rows_; }
-    size_t cols() const { return cols_; }
-
-    void randomFillSPD() {
-        #pragma omp parallel for
-        for (size_t i = 0; i < rows_; ++i) {
-            for (size_t j = 0; j <= i; ++j) {
-                double value = static_cast<double>(rand()) / RAND_MAX;
-                data[i][j] = value;
-                data[j][i] = value;
-            }
-            data[i][i] += rows_; // Ensure diagonal dominance
-        }
-    }
-
-    std::vector<double> operator*(const std::vector<double>& x) const {
-        std::vector<double> result(rows_, 0.0);
-        #pragma omp parallel for
-        for (size_t i = 0; i < rows_; ++i) {
-            for (size_t j = 0; j < cols_; ++j) {
-                result[i] += data[i][j] * x[j];
-            }
-        }
-        return result;
-    }
-};
-
-template <class Vector>
-int CG(const DenseMatrix &A, Vector &x, const Vector &b, int &max_iter, typename Vector::value_type &tol) {
+template <class Matrix, class Vector>
+int CG(const Matrix &A, Vector &x, const Vector &b, int &max_iter, typename Vector::value_type &tol) {
     using Real = typename Vector::value_type;
-    Real   resid;
+    Real resid;
     Vector p(b.size(), 0.0);
     Vector q(b.size(), 0.0);
-    Real   alpha, beta, rho;
-    Real   rho_1(0.0);
+    Real alpha, beta, rho;
+    Real rho_1(0.0);
 
-    Real   normb = std::sqrt(std::inner_product(b.begin(), b.end(), b.begin(), 0.0));
+    Real normb = std::sqrt(std::inner_product(b.begin(), b.end(), b.begin(), 0.0));
     Vector r = b;
     Vector Ax = A * x;
 
@@ -93,19 +28,19 @@ int CG(const DenseMatrix &A, Vector &x, const Vector &b, int &max_iter, typename
         r[i] -= Ax[i];
     }
 
-    if(normb == 0.0)
+    if (normb == 0.0)
         normb = 1;
 
-    if((resid = std::sqrt(std::inner_product(r.begin(), r.end(), r.begin(), 0.0)) / normb) <= tol) {
+    if ((resid = std::sqrt(std::inner_product(r.begin(), r.end(), r.begin(), 0.0)) / normb) <= tol) {
         tol = resid;
         max_iter = 0;
         return 0;
     }
 
-    for(int i = 1; i <= max_iter; i++) {
+    for (int i = 1; i <= max_iter; i++) {
         rho = std::inner_product(r.begin(), r.end(), r.begin(), 0.0);
 
-        if(i == 1)
+        if (i == 1)
             p = r;
         else {
             beta = rho / rho_1;
@@ -126,7 +61,7 @@ int CG(const DenseMatrix &A, Vector &x, const Vector &b, int &max_iter, typename
 
         resid = std::sqrt(std::inner_product(r.begin(), r.end(), r.begin(), 0.0)) / normb;
 
-        if(resid <= tol) {
+        if (resid <= tol) {
             tol = resid;
             max_iter = i;
             return 0;
@@ -140,11 +75,12 @@ int CG(const DenseMatrix &A, Vector &x, const Vector &b, int &max_iter, typename
 }
 
 void testCG() {
-    // Small SPD matrix
-    std::cout << "Testing with a small SPD matrix..." << std::endl;
+    std::cout << "\n-------Testing with a small SPD matrix: size = 5. ---------------\n";
     size_t small_size = 5;
-    DenseMatrix small_A(small_size, small_size);
+    DenseMatrix small_A(small_size, small_size, ORDERING::ROWMAJOR);
     small_A.randomFillSPD();
+    small_A.printStorageOrder();
+    small_A.printParallelInfo();
     std::vector<double> small_b(small_size, 1.0);
     std::vector<double> small_x(small_size, 0.0);
     int small_max_iter = 100;
@@ -154,11 +90,23 @@ void testCG() {
               << ", Iterations: " << small_max_iter
               << ", Residual: " << small_tol << std::endl;
 
-    // Medium SPD matrix
-    std::cout << "\nTesting with a medium SPD matrix..." << std::endl;
+    DenseMatrix small_A_col(small_size, small_size, ORDERING::COLUMNMAJOR);
+    small_A_col.randomFillSPD();
+    small_A_col.printStorageOrder();
+    small_A_col.printParallelInfo();
+    small_b.assign(small_size, 1.0);
+    small_x.assign(small_size, 0.0);
+    small_result = CG(small_A_col, small_x, small_b, small_max_iter, small_tol);
+    std::cout << "Result: " << (small_result == 0 ? "Converged" : "Failed")
+              << ", Iterations: " << small_max_iter
+              << ", Residual: " << small_tol << std::endl;
+
+    std::cout << "\n-------Testing with a medium SPD matrix: size = 50. ---------------\n";
     size_t medium_size = 50;
-    DenseMatrix medium_A(medium_size, medium_size);
+    DenseMatrix medium_A(medium_size, medium_size, ORDERING::ROWMAJOR);
     medium_A.randomFillSPD();
+    medium_A.printStorageOrder();
+    medium_A.printParallelInfo();
     std::vector<double> medium_b(medium_size, 1.0);
     std::vector<double> medium_x(medium_size, 0.0);
     int medium_max_iter = 500;
@@ -168,10 +116,20 @@ void testCG() {
               << ", Iterations: " << medium_max_iter
               << ", Residual: " << medium_tol << std::endl;
 
-    // Documenting Results
+    DenseMatrix medium_A_col(medium_size, medium_size, ORDERING::COLUMNMAJOR);
+    medium_A_col.randomFillSPD();
+    medium_A_col.printStorageOrder();
+    medium_A_col.printParallelInfo();
+    medium_b.assign(medium_size, 1.0);
+    medium_x.assign(medium_size, 0.0);
+    medium_result = CG(medium_A_col, medium_x, medium_b, medium_max_iter, medium_tol);
+    std::cout << "Result: " << (medium_result == 0 ? "Converged" : "Failed")
+              << ", Iterations: " << medium_max_iter
+              << ", Residual: " << medium_tol << std::endl;
+
     std::cout << "\nResults documented for analysis." << std::endl;
 }
 
 } // namespace LinearAlgebra
 
-#endif
+#endif // CG_HPP
