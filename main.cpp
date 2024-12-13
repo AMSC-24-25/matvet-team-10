@@ -1,11 +1,12 @@
+#include <iostream>
+#include <string>
 #include "cg.hpp"
 
-int main() {
+using namespace std;
 
-    LinearAlgebra::testCG(); //calling the function testCG from cg.hpp
+int main() {
+    cout << "Testing Conjugate Gradient algorithm with Dense matrix\n";
+    LinearAlgebra::testCG();
 
     return 0;
 }
-
-//Compile Command: g++ -std=c++17 -O2 -fopenmp -o cg_solution main.cpp
-// Run the Program: ./cg_solutiongit 
