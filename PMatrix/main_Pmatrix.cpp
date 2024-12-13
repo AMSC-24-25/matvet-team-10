@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
 
     // Check for implementation flag
     if (argc < 2) {
-        cerr << "Usage: " << argv[1] << " <implementation_flag> [matrix_file.mtx]" << endl;
+        cerr << "Usage: " << argv[0] << " <implementation_flag> [matrix_file.mtx]" << endl;
         cerr << "Implementation flags: --dense or --sparse" << endl;
         return 1;
     }
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
         cout << "Implementing with sparse matrix in scalar mode\n";
         // Check for matrix file argument
         if (argc < 3) {
-            cerr << "Usage: " << argv << " --sparse <matrix_file.mtx>" << endl;
+            cerr << "Usage: " << argv[0] << " --sparse <matrix_file.mtx>" << endl;
             return 1;
         }
 

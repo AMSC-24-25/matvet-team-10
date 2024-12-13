@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include "chrono.hpp"
-#include <Eigen/SparseCore>
-#include <unsupported/Eigen/SparseExtra>
+#include </u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/SparseCore>
+#include </u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/SparseExtra>
 
 using namespace Eigen;
 using namespace std;
@@ -41,19 +41,16 @@ public:
         auto start_time = chrono::high_resolution_clock::now();
 
         // Compute results
-        SpVec result = A * x;
+        SpVec b = A * x;
 
         // End timing
         auto end_time = chrono::high_resolution_clock::now();
         auto elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
 
-        // Print results
-        cout << "\n--- Sparse Matrix Test ---\n";
-        cout << "Final result vector y: [";
-        for (int i = 0; i < result.size(); ++i) {
-            cout << result[i] << (i < result.size() - 1 ? ", " : "");
-        }
-        cout << "]" << endl;
+        // save results
+        cout << "saving result in file: 'sparse_result.mtx'\n";
+        Eigen::saveMarketVector(b, "sparse_result.mtx");
+        
         cout << "Computation time: " << elapsed_time << " milliseconds\n";
     }
 };
