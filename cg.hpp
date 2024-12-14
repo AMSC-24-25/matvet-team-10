@@ -97,76 +97,32 @@ int CG(const Matrix &A, Vector &x, const Vector &b, int &max_iter, typename Vect
     return 1;
 }
 
-void testCG() {
+void runTest(size_t size, ORDERING order, int max_iter, double tol) {
     auto start_time = std::chrono::high_resolution_clock::now();
-    std::cout << "\n-------Testing with a small SPD matrix: size = 5. ---------------\n";
-    size_t small_size = 5;
-    DenseMatrix small_A(small_size, small_size, ORDERING::ROWMAJOR);
-    small_A.randomFillSPD();
-    small_A.printStorageOrder();
-    small_A.printParallelInfo();
-    std::vector<double> small_b(small_size, 1.0);
-    std::vector<double> small_x(small_size, 0.0);
-    int small_max_iter = 100;
-    double small_tol = 1e-6;
-    int small_result = CG(small_A, small_x, small_b, small_max_iter, small_tol);
-    std::cout << "Result: " << (small_result == 0 ? "Converged" : "Failed")
-              << ", Iterations: " << small_max_iter
-              << ", Residual: " << small_tol << std::endl;
+    DenseMatrix A(size, size, order);
+    A.randomFillSPD();
+    A.printStorageOrder();
+    A.printParallelInfo();
+    std::vector<double> b(size, 1.0);
+    std::vector<double> x(size, 0.0);
+    int result = CG(A, x, b, max_iter, tol);
+    std::cout << "Result: " << (result == 0 ? "Converged" : "Failed")
+              << ", Iterations: " << max_iter
+              << ", Residual: " << tol << std::endl;
 
     auto end_time = std::chrono::high_resolution_clock::now();
-    auto compuation_time = std::chrono::duration_cast<std::chrono:: duration<double, std::milli>> (end_time - start_time).count();
-    std::cout << "computation time = " << compuation_time << " ms\n";
+    auto computation_time = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end_time - start_time).count();
+    std::cout << "Computation time: " << computation_time << " ms\n";
+}
 
-    start_time = std::chrono::high_resolution_clock::now();
-    DenseMatrix small_A_col(small_size, small_size, ORDERING::COLUMNMAJOR);
-    small_A_col.randomFillSPD();
-    small_A_col.printStorageOrder();
-    small_A_col.printParallelInfo();
-    small_b.assign(small_size, 1.0);
-    small_x.assign(small_size, 0.0);
-    small_result = CG(small_A_col, small_x, small_b, small_max_iter, small_tol);
-    std::cout << "Result: " << (small_result == 0 ? "Converged" : "Failed")
-              << ", Iterations: " << small_max_iter
-              << ", Residual: " << small_tol << std::endl;
+void testCG() {
+    std::cout << "\n-------Testing with small SPD matrices: size = 5. ---------------\n";
+    runTest(5, ORDERING::ROWMAJOR, 100, 1e-6);
+    runTest(5, ORDERING::COLUMNMAJOR, 100, 1e-6);
 
-    end_time = std::chrono::high_resolution_clock::now();
-    compuation_time = std::chrono::duration_cast<std::chrono:: duration<double, std::milli>>  (end_time - start_time).count();
-    std::cout << "computation time = " << compuation_time << " ms\n";
-
-    std::cout << "\n-------Testing with a medium SPD matrix: size = 50. ---------------\n";
-    size_t medium_size = 50;
-    start_time = std::chrono::high_resolution_clock::now();
-    DenseMatrix medium_A(medium_size, medium_size, ORDERING::ROWMAJOR);
-    medium_A.randomFillSPD();
-    medium_A.printStorageOrder();
-    medium_A.printParallelInfo();
-    std::vector<double> medium_b(medium_size, 1.0);
-    std::vector<double> medium_x(medium_size, 0.0);
-    int medium_max_iter = 500;
-    double medium_tol = 1e-6;
-    int medium_result = CG(medium_A, medium_x, medium_b, medium_max_iter, medium_tol);
-    std::cout << "Result: " << (medium_result == 0 ? "Converged" : "Failed")
-              << ", Iterations: " << medium_max_iter
-              << ", Residual: " << medium_tol << std::endl;
-    end_time = std::chrono::high_resolution_clock::now();
-    compuation_time = std::chrono::duration_cast<std::chrono:: duration<double, std::milli>>  (end_time - start_time).count();
-    std::cout << "computation time = " << compuation_time << " ms\n";
-
-    start_time = std::chrono::high_resolution_clock::now();
-    DenseMatrix medium_A_col(medium_size, medium_size, ORDERING::COLUMNMAJOR);
-    medium_A_col.randomFillSPD();
-    medium_A_col.printStorageOrder();
-    medium_A_col.printParallelInfo();
-    medium_b.assign(medium_size, 1.0);
-    medium_x.assign(medium_size, 0.0);
-    medium_result = CG(medium_A_col, medium_x, medium_b, medium_max_iter, medium_tol);
-    std::cout << "Result: " << (medium_result == 0 ? "Converged" : "Failed")
-              << ", Iterations: " << medium_max_iter
-              << ", Residual: " << medium_tol << std::endl;
-    end_time = std::chrono::high_resolution_clock::now();
-    compuation_time = std::chrono::duration_cast<std::chrono:: duration<double, std::milli>>  (end_time - start_time).count();
-    std::cout << "computation time = " << compuation_time << " ms\n";
+    std::cout << "\n-------Testing with medium SPD matrices: size = 50. ---------------\n";
+    runTest(50, ORDERING::ROWMAJOR, 500, 1e-6);
+    runTest(50, ORDERING::COLUMNMAJOR, 500, 1e-6);
 
     std::cout << "\nResults documented for analysis." << std::endl;
 }
