@@ -28,6 +28,7 @@
 #include <cmath>
 #include <omp.h>
 #include <numeric>
+#include <chrono>
 #include "denseMatrix.hpp"
 
 namespace LinearAlgebra {
@@ -97,6 +98,7 @@ int CG(const Matrix &A, Vector &x, const Vector &b, int &max_iter, typename Vect
 }
 
 void testCG() {
+    auto start_time = std::chrono::high_resolution_clock::now();
     std::cout << "\n-------Testing with a small SPD matrix: size = 5. ---------------\n";
     size_t small_size = 5;
     DenseMatrix small_A(small_size, small_size, ORDERING::ROWMAJOR);
@@ -112,6 +114,11 @@ void testCG() {
               << ", Iterations: " << small_max_iter
               << ", Residual: " << small_tol << std::endl;
 
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto compuation_time = std::chrono::duration_cast<std::chrono:: duration<double, std::milli>> (end_time - start_time).count();
+    std::cout << "computation time = " << compuation_time << " ms\n";
+
+    start_time = std::chrono::high_resolution_clock::now();
     DenseMatrix small_A_col(small_size, small_size, ORDERING::COLUMNMAJOR);
     small_A_col.randomFillSPD();
     small_A_col.printStorageOrder();
@@ -123,8 +130,13 @@ void testCG() {
               << ", Iterations: " << small_max_iter
               << ", Residual: " << small_tol << std::endl;
 
+    end_time = std::chrono::high_resolution_clock::now();
+    compuation_time = std::chrono::duration_cast<std::chrono:: duration<double, std::milli>>  (end_time - start_time).count();
+    std::cout << "computation time = " << compuation_time << " ms\n";
+
     std::cout << "\n-------Testing with a medium SPD matrix: size = 50. ---------------\n";
     size_t medium_size = 50;
+    start_time = std::chrono::high_resolution_clock::now();
     DenseMatrix medium_A(medium_size, medium_size, ORDERING::ROWMAJOR);
     medium_A.randomFillSPD();
     medium_A.printStorageOrder();
@@ -137,7 +149,11 @@ void testCG() {
     std::cout << "Result: " << (medium_result == 0 ? "Converged" : "Failed")
               << ", Iterations: " << medium_max_iter
               << ", Residual: " << medium_tol << std::endl;
+    end_time = std::chrono::high_resolution_clock::now();
+    compuation_time = std::chrono::duration_cast<std::chrono:: duration<double, std::milli>>  (end_time - start_time).count();
+    std::cout << "computation time = " << compuation_time << " ms\n";
 
+    start_time = std::chrono::high_resolution_clock::now();
     DenseMatrix medium_A_col(medium_size, medium_size, ORDERING::COLUMNMAJOR);
     medium_A_col.randomFillSPD();
     medium_A_col.printStorageOrder();
@@ -148,6 +164,9 @@ void testCG() {
     std::cout << "Result: " << (medium_result == 0 ? "Converged" : "Failed")
               << ", Iterations: " << medium_max_iter
               << ", Residual: " << medium_tol << std::endl;
+    end_time = std::chrono::high_resolution_clock::now();
+    compuation_time = std::chrono::duration_cast<std::chrono:: duration<double, std::milli>>  (end_time - start_time).count();
+    std::cout << "computation time = " << compuation_time << " ms\n";
 
     std::cout << "\nResults documented for analysis." << std::endl;
 }
