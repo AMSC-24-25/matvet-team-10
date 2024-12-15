@@ -32,7 +32,7 @@ main_Pmatrix.o: main_Pmatrix.cpp \
  /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/info_inln.h \
  /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/win_inln.h \
  /usr/lib/x86_64-linux-gnu/openmpi/include/openmpi/ompi/mpi/cxx/file_inln.h \
- MeryPmatrix.hpp \
+ task1/cg.hpp task1/denseMatrix.hpp task2/matVec_mpi.hpp \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/Dense \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/Core \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -208,7 +208,7 @@ main_Pmatrix.o: main_Pmatrix.cpp \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/Eigenvalues/./RealQZ.h \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
- sparseMatrix.hpp chrono.hpp \
+ task3/sparseMatrix.hpp task3/../chrono.hpp \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/SparseCore \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseUtil.h \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/src/SparseCore/SparseMatrixBase.h \
@@ -294,5 +294,4 @@ main_Pmatrix.o: main_Pmatrix.cpp \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/src/SparseExtra/RandomSetter.h \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/src/SparseExtra/MarketIO.h \
  /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/src/SparseExtra/MatrixMarketIterator.h \
- /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/../../Eigen/src/Core/util/ReenableStupidWarnings.h \
- cg.hpp denseMatrix.hpp
+ /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/../../Eigen/src/Core/util/ReenableStupidWarnings.h

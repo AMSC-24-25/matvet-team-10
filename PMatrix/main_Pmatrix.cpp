@@ -2,9 +2,10 @@
 #include <string>
 #include <mpi.h>
 #include <omp.h>
-#include "MeryPmatrix.hpp"
-#include "sparseMatrix.hpp"
-#include "cg.hpp"
+#include "task1/cg.hpp"
+#include "task2/matVec_mpi.hpp"
+#include "task3/sparseMatrix.hpp"
+
 
 using namespace std;
 
@@ -50,7 +51,7 @@ int main(int argc, char* argv[]) {
 
         // Run the sparse matrix implementation
         SPMatrixTest matrix_test;
-        matrix_test.initialize(matrix_file);
+        matrix_test.initialize("matrices/" + matrix_file);
         matrix_test.run_test();
     } 
    else {

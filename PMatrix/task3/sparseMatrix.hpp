@@ -2,7 +2,7 @@
 #define SPMATRIX_TEST_HPP
 
 #include <iostream>
-#include "chrono.hpp"
+#include "../chrono.hpp"
 #include </u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/SparseCore>
 #include </u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/SparseExtra>
 
@@ -49,7 +49,7 @@ public:
 
         // save results
         cout << "saving result in file: 'sparse_result.mtx'\n";
-        Eigen::saveMarketVector(b, "sparse_result.mtx");
+        Eigen::saveMarketVector(b, "../matrices/sparse_result.mtx");
         
         cout << "Computation time: " << elapsed_time << " milliseconds\n";
     }
