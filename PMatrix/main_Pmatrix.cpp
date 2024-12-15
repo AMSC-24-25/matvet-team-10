@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
     // Check for implementation flag
     if (argc < 2) {
         cerr << "Usage: " << argv[0] << " <implementation_flag> [matrix_file.mtx]" << endl;
-        cerr << "Implementation flags: --dense or --sparse or --feature1" << endl;
+        cerr << "Implementation flags: --dense or --sparse or --cg" << endl;
         return 1;
     }
 
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
         matrix_test.run_test();
     } 
    else {
-        cerr << "Invalid implementation flag. Use --dense-parallel, --sparse-scalar, or --cg-test." << endl;
+        cerr << "Invalid implementation flag. Use --dense, --sparse, or --cg." << endl;
         return 1;
     }
     return 0;
