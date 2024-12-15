@@ -1,8 +1,10 @@
 #include <iostream>
 #include <string>
 #include <mpi.h>
+#include <omp.h>
 #include "MeryPmatrix.hpp"
 #include "sparseMatrix.hpp"
+#include "cg.hpp"
 
 using namespace std;
 
@@ -11,13 +13,17 @@ int main(int argc, char* argv[]) {
     // Check for implementation flag
     if (argc < 2) {
         cerr << "Usage: " << argv[0] << " <implementation_flag> [matrix_file.mtx]" << endl;
-        cerr << "Implementation flags: --dense or --sparse" << endl;
+        cerr << "Implementation flags: --dense or --sparse or --feature1" << endl;
         return 1;
     }
 
     string flag = argv[1];
 
-    if (flag == "--dense") {
+    if (flag == "--cg") {
+        cout << "Testing Conjugate Gradient algorithm with Dense matrix\n";
+        LinearAlgebra::testCG();
+    }
+    else if (flag == "--dense") {
         // Initialize MPI
         MPI_Init(&argc, &argv);
 
@@ -46,8 +52,9 @@ int main(int argc, char* argv[]) {
         SPMatrixTest matrix_test;
         matrix_test.initialize(matrix_file);
         matrix_test.run_test();
-    } else {
-        cerr << "Invalid implementation flag. Use --dense or --sparse." << endl;
+    } 
+   else {
+        cerr << "Invalid implementation flag. Use --dense-parallel, --sparse-scalar, or --cg-test." << endl;
         return 1;
     }
     return 0;
