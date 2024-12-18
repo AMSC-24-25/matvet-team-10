@@ -1,0 +1,3 @@
+I have put some comments in the code and committed. It would be nice to see in the presentation the comparisons of efficiency. The probelm here is that to be really efficient an iterative method should have a good preconditioner.\
+
+But we could at least see the results of parallelization.
