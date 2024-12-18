@@ -7,7 +7,19 @@
 #include <random>
 
 enum class ORDERING { ROWMAJOR, COLUMNMAJOR };
-
+// Since the ordering is normally choesen at the start and never changed, you could
+// have made a class template and replaced if with if constexpr.
+// you gain in efficiency:
+/*
+template <ORDERING O>
+class DenseMatrix{
+...
+  if constexpr (O==ROWMAJOR)
+     do something
+  else
+     so something else
+     
+    */
 class DenseMatrix {
 private:
     std::vector<double> data;
@@ -51,6 +63,7 @@ public:
 
     std::vector<double> operator*(const std::vector<double>& x) const {
         std::vector<double> result(rows_, 0.0);
+        // this loop is not the optimal one for column ordered matrices.
         #pragma omp parallel for
         for (size_t i = 0; i < rows_; ++i) {
             for (size_t j = 0; j < cols_; ++j) {
