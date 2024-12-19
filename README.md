@@ -78,15 +78,16 @@ The `runTest` function evaluates the CG implementation:
 ---
 
 ### **How to Use It**
+**inside PMatrix**
 
 1. **Compile the code**:
    ```bash
-   root@9f599bdc117f PMatrix # make
+    make
    ```
 
 2. **Run the CG tests**:
    ```bash
-   root@9f599bdc117f PMatrix # ./main_Pmatrix --cg
+     ./main_Pmatrix --cg
    ```
 
 ---
