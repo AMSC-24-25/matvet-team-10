@@ -278,6 +278,41 @@ Computation time: 5.579e-06 seconds
 3. **Performance Consistency**:
    - The low computation times indicate that the implementation is efficient, leveraging parallelism effectively to handle the matrix-vector multiplication.
 
+# TASK 3: Sparse Matrix Implementation and Testing
+
+### Overview
+
+In this task, we focused on implementing and testing operations with sparse matrices using the Eigen library. Our primary goal was to handle matrix-vector multiplication efficiently and store the results in a file for further analysis.
+
+### Implementation Details
+
+1. **Sparse Matrix Initialization**:  
+   We utilized Eigen's `loadMarket` function to load a sparse matrix from a `.mtx` file—a widely used format for storing sparse matrices. The matrix was then initialized with a vector of ones to perform the matrix-vector multiplication. This approach ensured smooth and efficient handling of sparse data.
+
+2. **Matrix-Vector Multiplication**:  
+   The core operation in this task was the multiplication of the sparse matrix with a vector. This computation is a critical step in many numerical methods and optimizations. Eigen's built-in functions provided an optimized and straightforward way to perform this multiplication efficiently.
+
+3. **Performance Measurement**:  
+   To evaluate the efficiency of our implementation, we measured the computation time for the matrix-vector multiplication. Using the `<chrono>` library, we recorded the execution time in milliseconds. This allowed us to track performance and gain insights into potential optimization opportunities.
+
+4. **Result Storage**:  
+   The resulting vector from the matrix-vector multiplication was saved to a file in the `.mtx` format using Eigen's `saveMarketVector` function. This step ensured that the results were stored in a structured format, making them accessible for future use and analysis.
+
+### Key Highlights
+
+- **Efficiency**:  
+   Eigen’s sparse matrix capabilities allowed us to handle matrix-vector multiplication efficiently, even for large datasets.
+
+- **Performance Tracking**:  
+   By measuring computation time, we were able to monitor the implementation's performance and identify opportunities for optimization.
+
+- **Result Management**:  
+   Saving the resulting vector in `.mtx` format ensures compatibility with future analyses, especially for large matrices.
+
+### Conclusion
+
+This task showcased the effective use of the Eigen library for sparse matrix operations. It underlined the importance of efficient data handling, accurate performance tracking, and result management in numerical computations. The implementation is reliable and serves as a strong foundation for further enhancements and applications.
+
 ---
 
 ## Acknowledgements
