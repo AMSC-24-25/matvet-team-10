@@ -229,20 +229,28 @@ MPI is a great choice for operations like this because:
 - It’s **scalable**, meaning it can handle much larger matrices by using multiple machines.
 - MPI is built for **high-performance environments**, so it minimizes delays when processes communicate.
 
-#### How to Use It
+### How to Use It
 
-1. Compile the program with the `make` command:
+1. **Compile the program**:
    ```bash
    root@9f599bdc117f PMatrix # make
    mpic++ -std=c++17 -I.  -I /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3 -O2 -fopenmp  -c main_Pmatrix.cpp -o main_Pmatrix.o
    mpic++ -std=c++17 -I.  -I /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3 -O2 -fopenmp  main_Pmatrix.o -o main_Pmatrix
    ```
 
-2. Run the program with:
+2. **Run the program**:
+   - By default:
+     ```bash
+     root@9f599bdc117f PMatrix # ./main_Pmatrix --dense
+     ```
+   - To specify the number of MPI processes (threads):
+     ```bash
+     root@9f599bdc117f PMatrix # mpirun -n <number_of_processes> ./main_Pmatrix --dense
+     ```
+   For example:
    ```bash
-   root@9f599bdc117f PMatrix # ./main_Pmatrix --dense
+   root@9f599bdc117f PMatrix # mpirun -n 4 ./main_Pmatrix --dense
    ```
-
 #### Example Output
 
 Here’s an example of what the program might print when you run it:
