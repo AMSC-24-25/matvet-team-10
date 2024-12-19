@@ -33,15 +33,14 @@ public:
         }
         rows = A.rows();
         cols = A.cols();
-        cout << "Matrix loaded successfully. Dimensions: " << rows << " x " << cols << endl;
-        cout << "Number of non-zero elements: " << A.nonZeros() << endl;
+        cout << "Matrix loaded successfully.\n";
 
         // Initialize vector
         x = SpVec::Ones(cols);
     }
 
     // Run a test
-    void run_test(const string& output_file) {
+    void run_test() {
         cout << "Starting matrix-vector multiplication test with matrix size: " << rows << " x " << cols << endl;
         // Start timing
         auto start_time = chrono::high_resolution_clock::now();
@@ -54,8 +53,9 @@ public:
         auto elapsed_time = chrono::duration_cast<chrono::duration<double, milli>>(end_time - start_time).count();
 
         // Save results
-        cout << "Saving result in file: " << output_file << endl;
-        Eigen::saveMarketVector(b, output_file);
+        string result_file = "sparse_result.mtx";
+        cout << "Saving result in file: " << result_file << endl;
+        Eigen::saveMarketVector(b, result_file);
 
         cout << "Computation time: " << elapsed_time << " milliseconds" << endl;
     }
