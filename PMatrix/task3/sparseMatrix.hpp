@@ -53,7 +53,7 @@ public:
         auto elapsed_time = chrono::duration_cast<chrono::duration<double, milli>>(end_time - start_time).count();
 
         // Save results
-        string result_file = "sparse_result.mtx";
+        string result_file = "matrices/sparse_result.mtx";
         cout << "Saving result in file: " << result_file << endl;
         Eigen::saveMarketVector(b, result_file);
 
