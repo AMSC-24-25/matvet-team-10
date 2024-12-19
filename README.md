@@ -234,8 +234,8 @@ MPI is a great choice for operations like this because:
 1. **Compile the program**:
    ```bash
    root@9f599bdc117f PMatrix # make
-   mpic++ -std=c++17 -I.  -I /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3 -O2 -fopenmp  -c main_Pmatrix.cpp -o main_Pmatrix.o
-   mpic++ -std=c++17 -I.  -I /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3 -O2 -fopenmp  main_Pmatrix.o -o main_Pmatrix
+    mpic++ -std=c++17  -O2 -fopenmp -I.  -I /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3   -c main_Pmatrix.cpp -o main_Pmatrix.o
+   mpic++ -std=c++17  -O2 -fopenmp -I.  -I /u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3   main_Pmatrix.o -o main_Pmatrix
    ```
 
 2. **Run the program**:
