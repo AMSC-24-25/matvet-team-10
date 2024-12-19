@@ -1,7 +1,8 @@
 # Compiler and flags
 CXX = mpic++
-STDFLAGS = -std=c++17
-CPPFLAGS = -I.  -I ${mkEigenInc} -O2 -fopenmp # Include current directory for headers
+STDFLAGS = -std=c++17 
+OMPFLAG = -O2 -fopenmp
+CPPFLAGS = -I.  -I ${mkEigenInc}  # Include current directory for headers
 
 # Sources and objects
 SRCS = $(wildcard *.cpp)
@@ -22,11 +23,11 @@ all: $(EXEC)
 
 # Rule to build each executable
 $(EXEC): % : %.o $(filter-out $(basename $@).o, $(OBJS))
-	$(CXX) $(STDFLAGS) $(CPPFLAGS) $^ -o $@
+	$(CXX) $(STDFLAGS) $(OMPFLAG) $(CPPFLAGS) $^ -o $@
 
 # Rule to build object files
 %.o: %.cpp $(HEADERS)
-	$(CXX) $(STDFLAGS) $(CPPFLAGS) -c $< -o $@
+	$(CXX) $(STDFLAGS) $(OMPFLAG) $(CPPFLAGS) -c $< -o $@
 
 # Clean targets
 clean:
@@ -43,7 +44,7 @@ doc:
 $(DEPEND): $(SRCS) $(HEADERS)
 	rm -f $(DEPEND)
 	for f in $(SRCS); do \
-		$(CXX) $(STDFLAGS) $(CPPFLAGS) -MM $$f >> $(DEPEND); \
+		$(CXX) $(STDFLAGS) $(OMPFLAG) $(CPPFLAGS) -MM $$f >> $(DEPEND); \
 	done
 
 -include $(DEPEND)

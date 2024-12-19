@@ -2,16 +2,9 @@
 #define SPMATRIX_TEST_HPP
 
 #include <iostream>
-// It is not a good practice to indicate a path in the included files. Unless it is a 
-// subdirectory of the main paths (like in Eigen/Core, where Eigen is meant to be a subdirectory of the
-// directory eith the Eigen header files).
-// you shoud do
-//#include "chrono.hpp"
-//#include "Eigen/Sparsecore
-// etc. end indicate the path with the -I<path> option of the compiler.
-#include "../chrono.hpp"
-#include </u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/SparseCore>
-#include </u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/unsupported/Eigen/SparseExtra>
+#include "chrono.hpp"
+#include <Eigen/SparseCore>
+#include <unsupported/Eigen/SparseExtra>
 
 using namespace Eigen;
 using namespace std;
