@@ -28,7 +28,7 @@
 #include <cmath>
 #include <omp.h>
 #include <numeric>
-#include <chrono>
+#include "chrono.hpp"
 #include "denseMatrix.hpp"
 
 namespace LinearAlgebra {

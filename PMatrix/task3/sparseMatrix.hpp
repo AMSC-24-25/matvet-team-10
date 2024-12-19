@@ -45,7 +45,7 @@ public:
 
         // End timing
         auto end_time = chrono::high_resolution_clock::now();
-        auto elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
+        auto elapsed_time = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end_time - start_time).count();
 
         // save results
         cout << "saving result in file: 'sparse_result.mtx'\n";
