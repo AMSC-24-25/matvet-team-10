@@ -30,7 +30,7 @@ this task focused on implementing and testing a sparse matrix using the Eigen li
 
 2. **Run the Sparse Matrix Test**:
    ```bash
-   ./main_Pmatrix --sparse <sparsr_matrix.mtx>
+   ./main_Pmatrix --sparse sparse_matrix.mtx
    ```
 
 ### Example Output
