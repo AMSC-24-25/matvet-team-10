@@ -4,7 +4,7 @@
 #include <iostream>
 #include <random>
 #include <mpi.h>
-#include </u/sw/toolchains/gcc-glibc/11.2.0/pkgs/eigen/3.3.9/include/eigen3/Eigen/Dense>
+#include <Eigen/Dense>
 
 #define MAX_ROW 5
 #define MAX_COL 5
