@@ -25,18 +25,24 @@ public:
 
     // Initialize matrices and vectors
     void initialize(const string& matrix_file) {
+        cout << "Loading matrix from file: " << matrix_file << endl;
         // Load the matrix from the .mtx file
         if (!Eigen::loadMarket(A, matrix_file)) {
             cerr << "Error loading matrix from file: " << matrix_file << endl;
             exit(1);
         }
+        rows = A.rows();
+        cols = A.cols();
+        cout << "Matrix loaded successfully. Dimensions: " << rows << " x " << cols << endl;
+        cout << "Number of non-zero elements: " << A.nonZeros() << endl;
+
         // Initialize vector
-        x = SpVec::Ones(A.cols());
+        x = SpVec::Ones(cols);
     }
 
     // Run a test
-    void run_test() {
-        cout << "start run_test with sparse matrix\n";
+    void run_test(const string& output_file) {
+        cout << "Starting matrix-vector multiplication test with matrix size: " << rows << " x " << cols << endl;
         // Start timing
         auto start_time = chrono::high_resolution_clock::now();
 
@@ -45,13 +51,14 @@ public:
 
         // End timing
         auto end_time = chrono::high_resolution_clock::now();
-        auto elapsed_time = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end_time - start_time).count();
+        auto elapsed_time = chrono::duration_cast<chrono::duration<double, milli>>(end_time - start_time).count();
 
-        // save results
-        cout << "saving result in file: 'sparse_result.mtx'\n";
-        Eigen::saveMarketVector(b, "../matrices/sparse_result.mtx");
-        
-        cout << "Computation time: " << elapsed_time << " milliseconds\n";
+        // Save results
+        cout << "Saving result in file: " << output_file << endl;
+        Eigen::saveMarketVector(b, output_file);
+
+        cout << "Computation time: " << elapsed_time << " milliseconds" << endl;
     }
 };
-# endif // SPMATRIX_TEST_HPP
+
+#endif // SPMATRIX_TEST_HPP
