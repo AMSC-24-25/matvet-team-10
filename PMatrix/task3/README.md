@@ -38,20 +38,24 @@ this task focused on implementing and testing a sparse matrix using the Eigen li
 Here’s an example of the output:
 
 ```
+Implementing with sparse matrix in scalar mode
+Loading matrix from file: matrices/spd_test.mtx
+Matrix loaded successfully.
 
+Starting matrix-vector multiplication test with matrix size: 48 x 48
+Saving result in file: sparse_result.mtx
+Computation time: 0.0023 milliseconds
 ```
 
 ### Matrices used for testing are SPD matrices downloaded from matrix market from Harwell-Boeing collection
 1. **Matrix 1**:
    - **Name**: [bcsstk01](https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/bcsstruc1/bcsstk01.html) 
    - **Dimensions**: 48 x 48
-   - **Non-zero Elements**: 400
    - **file name**: sparse_matrix.mtx
   
 2. **Matrix 2**:
    - **Name**: [bcsstk14](https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/bcsstruc2/bcsstk14.html)
    - **Dimensions**: 1806 x 1806
-   - **Non-zero Elements**: 63454
    - **file name**: sparse_test.mtx
 
 
