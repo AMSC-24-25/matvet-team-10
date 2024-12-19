@@ -43,8 +43,8 @@ Loading matrix from file: matrices/spd_test.mtx
 Matrix loaded successfully.
 
 Starting matrix-vector multiplication test with matrix size: 48 x 48
-Saving result in file: sparse_result.mtx
-Computation time: 0.0023 milliseconds
+Saving result in file: matrices/sparse_result.mtx
+Computation time: 0.0021 milliseconds
 ```
 
 ### Matrices used for testing are SPD matrices downloaded from matrix market from Harwell-Boeing collection
