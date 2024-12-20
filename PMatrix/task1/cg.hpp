@@ -1,28 +1,6 @@
 #ifndef CG_HPP
 #define CG_HPP
 
-//*****************************************************************
-// Iterative template routine -- CG
-//
-// CG solves the symmetric positive definite linear
-// system Ax=b using the Conjugate Gradient method.
-//
-// CG follows the algorithm described on p. 15 in the
-// SIAM Templates book.
-//
-// The return value indicates convergence within max_iter (input)
-// iterations (0), or no convergence within max_iter iterations (1).
-//
-// Upon successful return, output arguments have the following values:
-//
-//        x  --  approximate solution to Ax = b
-// max_iter  --  the number of iterations performed before the
-//               tolerance was reached
-//      tol  --  the residual after the final iteration
-//
-//*****************************************************************
-
-
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -97,9 +75,10 @@ int CG(const Matrix &A, Vector &x, const Vector &b, int &max_iter, typename Vect
     return 1;
 }
 
-void runTest(size_t size, ORDERING order, int max_iter, double tol) {
+template <ORDERING O>
+void runTest(size_t size, int max_iter, double tol) {
     auto start_time = std::chrono::high_resolution_clock::now();
-    DenseMatrix A(size, size, order);
+    DenseMatrix<O> A(size, size);
     A.randomFillSPD();
     A.printStorageOrder();
     A.printParallelInfo();
@@ -115,14 +94,15 @@ void runTest(size_t size, ORDERING order, int max_iter, double tol) {
     std::cout << "Computation time: " << computation_time << " ms\n";
 }
 
+// update with using ordering template
 void testCG() {
     std::cout << "\n-------Testing with small SPD matrices: size = 5. ---------------\n";
-    runTest(5, ORDERING::ROWMAJOR, 100, 1e-6);
-    runTest(5, ORDERING::COLUMNMAJOR, 100, 1e-6);
+    runTest<ORDERING::ROWMAJOR>(5, 100, 1e-6);
+    runTest<ORDERING::COLUMNMAJOR>(5, 100, 1e-6);
 
     std::cout << "\n-------Testing with medium SPD matrices: size = 50. ---------------\n";
-    runTest(50, ORDERING::ROWMAJOR, 500, 1e-6);
-    runTest(50, ORDERING::COLUMNMAJOR, 500, 1e-6);
+    runTest<ORDERING::ROWMAJOR>(50, 500, 1e-6);
+    runTest<ORDERING::COLUMNMAJOR>(50, 500, 1e-6);
 
     std::cout << "\nResults documented for analysis." << std::endl;
 }
