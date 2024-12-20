@@ -7,31 +7,19 @@
 #include <random>
 
 enum class ORDERING { ROWMAJOR, COLUMNMAJOR };
-// Since the ordering is normally choesen at the start and never changed, you could
-// have made a class template and replaced if with if constexpr.
-// you gain in efficiency:
-/*
+
 template <ORDERING O>
-class DenseMatrix{
-...
-  if constexpr (O==ROWMAJOR)
-     do something
-  else
-     so something else
-     
-    */
 class DenseMatrix {
 private:
     std::vector<double> data;
     size_t rows_, cols_;
-    ORDERING order_;
 
 public:
-    DenseMatrix(size_t rows, size_t cols, ORDERING order = ORDERING::ROWMAJOR)
-        : rows_(rows), cols_(cols), order_(order), data(rows * cols, 0.0) {}
+    DenseMatrix(size_t rows, size_t cols)
+        : rows_(rows), cols_(cols), data(rows * cols, 0.0) {}
 
     double& operator()(size_t i, size_t j) {
-        if (order_ == ORDERING::ROWMAJOR) {
+        if constexpr (O == ORDERING::ROWMAJOR) {
             return data[j + i * cols_];
         } else {
             return data[i + j * rows_];
@@ -39,7 +27,7 @@ public:
     }
 
     const double& operator()(size_t i, size_t j) const {
-        if (order_ == ORDERING::ROWMAJOR) {
+        if constexpr (O == ORDERING::ROWMAJOR) {
             return data[j + i * cols_];
         } else {
             return data[i + j * rows_];
@@ -63,11 +51,19 @@ public:
 
     std::vector<double> operator*(const std::vector<double>& x) const {
         std::vector<double> result(rows_, 0.0);
-        // this loop is not the optimal one for column ordered matrices.
-        #pragma omp parallel for
-        for (size_t i = 0; i < rows_; ++i) {
+        if constexpr (O == ORDERING::ROWMAJOR) {
+            #pragma omp parallel for
+            for (size_t i = 0; i < rows_; ++i) {
+                for (size_t j = 0; j < cols_; ++j) {
+                    result[i] += (*this)(i, j) * x[j];
+                }
+            }
+        } else {
+            #pragma omp parallel for
             for (size_t j = 0; j < cols_; ++j) {
-                result[i] += (*this)(i, j) * x[j];
+                for (size_t i = 0; i < rows_; ++i) {
+                    result[i] += (*this)(i, j) * x[j];
+                }
             }
         }
         return result;
@@ -86,7 +82,7 @@ public:
     }
 
     void printStorageOrder() const {
-        std::cout << "\nMatrix storage order: " << (order_ == ORDERING::ROWMAJOR ? "Row-major" : "Column-major") << std::endl;
+        std::cout << "\nMatrix storage order: " << (O == ORDERING::ROWMAJOR ? "Row-major" : "Column-major") << std::endl;
     }
 };
 
